@@ -1,0 +1,330 @@
+# Optimisasi TCN untuk Dataset Peternakan Ayam Broiler
+
+## ANALISIS DATASET
+
+### Karakteristik Data:
+- **Size**: 450 samples (relatif kecil)
+- **Features**: ~95 features (sangat high-dimensional)
+- **Periods**: 14 periode produksi
+- **Target**: Multi-horizon forecasting (1 hari, 3 hari ke depan)
+- **Domain**: Biological time series dengan cyclical patterns
+
+### Challenges Utama:
+1. **Small sample size** vs **high dimensionality** → Risk overfitting tinggi
+2. **Multiple forecasting horizons** → Need multi-output architecture
+3. **Biological cycles** → Need to capture weekly/periodic patterns
+4. **Feature redundancy** → Many engineered features might be correlated
+
+---
+
+## REKOMENDASI HYPERPARAMETER
+
+### 1. ARSITEKTUR INTI (Conservative Approach)
+
+```python
+OPTIMAL_TCN_CONFIG = {
+    # Data Configuration
+    "sequence_length": 7,  # 1 week context (biological cycle)
+    "batch_size": 16,      # Small batch untuk dataset kecil
+    
+    # Core Architecture (Reduced to prevent overfitting)
+    "nb_filters": 32,      # Dikurangi dari 120 → 32
+    "kernel_size": 3,      # Dikurangi dari 4 → 3  
+    "nb_stacks": 1,        # Dikurangi untuk simplify
+    "dilations": [1, 2, 4], # Short dilations untuk weekly patterns
+    
+    # Regularization (Aggressive)
+    "dropout_rate": 0.4,   # Dinaikkan dari 0.25 → 0.4
+    "spatial_dropout": 0.2, # Tambahan regularization
+    "kernel_regularizer": "l2",
+    "kernel_regularizer_strength": 1e-4,
+    
+    # Training (Conservative)
+    "learning_rate": 1e-4, # Dikurangi dari 2.5e-4
+    "optimizer": "adamw",
+    "weight_decay": 1e-3,
+    "gradient_clip_norm": 0.5,
+}
+```
+
+### 2. MULTI-HORIZON OUTPUT STRATEGY
+
+```python
+# Untuk prediksi 1 dan 3 hari
+MULTI_OUTPUT_CONFIG = {
+    "output_strategy": "multi_head",  # Separate heads untuk each horizon
+    "horizons": [1, 3],
+    "output_dims": [95, 95],  # Same features untuk each horizon
+    "horizon_weights": [0.6, 0.4],  # Weight lebih tinggi untuk 1-day
+}
+```
+
+### 3. FEATURE ENGINEERING RECOMMENDATIONS
+
+```python
+FEATURE_CONFIG = {
+    # Feature Selection (Critical untuk dataset kecil)
+    "feature_selection": "recursive_elimination",
+    "max_features": 30,  # Kurangi dari 95 → 30 features
+    
+    # Feature Groups Priority:
+    "priority_features": [
+        "DG_ACT", "FCR_ACT", "MATI", "JML_DEPLESI",  # Core metrics
+        "AGE", "SUHU_MAX", "PAKAN_ACT",              # Environmental
+        "*_lag_1", "*_lag_2", "*_lag_3",             # Short-term lags
+        "*_rolling_mean_7", "*_rolling_std_7",       # Weekly aggregates
+    ],
+    
+    # Normalization
+    "normalization": "robust_scaler",  # Better untuk outliers
+    "per_feature_norm": True,
+}
+```
+
+---
+
+## TRAINING STRATEGY
+
+### 1. CROSS-VALIDATION APPROACH
+
+```python
+CV_STRATEGY = {
+    "method": "time_series_split",
+    "n_splits": 5,
+    "test_size": 0.2,      # 90 samples for test
+    "validation_size": 0.2, # 90 samples for validation
+    "gap": 7,              # 7-day gap between train/test
+}
+```
+
+### 2. EARLY STOPPING & MONITORING
+
+```python
+TRAINING_CONFIG = {
+    "epochs": 200,
+    "early_stopping_patience": 25,  # Longer patience untuk small dataset
+    "early_stopping_metric": "val_mae_1day",  # Focus on 1-day accuracy
+    "lr_scheduler": "reduce_on_plateau",
+    "lr_patience": 15,
+    "lr_factor": 0.5,
+    "min_lr": 1e-6,
+}
+```
+
+### 3. ENSEMBLE STRATEGY
+
+```python
+ENSEMBLE_CONFIG = {
+    "n_models": 3,         # Small ensemble
+    "diversity_methods": [
+        "different_seeds",
+        "different_dropouts", 
+        "different_sequence_lengths"
+    ],
+    "combination": "weighted_average",
+}
+```
+
+---
+
+## DOMAIN-SPECIFIC OPTIMIZATIONS
+
+### 1. BIOLOGICAL CYCLE AWARENESS
+
+```python
+CYCLE_CONFIG = {
+    "sequence_length": 7,           # Weekly cycle
+    "use_cyclical_encoding": True,  # Encode day-of-week
+    "seasonal_decomposition": True, # Separate trend/seasonal
+    "cycle_features": [
+        "day_of_cycle",    # Day within 35-day cycle
+        "week_of_cycle",   # Week within cycle
+        "cycle_progress",  # Normalized position in cycle
+    ]
+}
+```
+
+### 2. MULTI-SCALE TEMPORAL PATTERNS
+
+```python
+MULTI_SCALE_CONFIG = {
+    "dilations": [1, 2, 4, 7],     # Include weekly dilation
+    "multi_scale_kernels": [2, 3, 7], # Daily, short-term, weekly
+    "temporal_attention": True,     # Focus on important time steps
+}
+```
+
+### 3. ROBUST LOSS FUNCTION
+
+```python
+LOSS_CONFIG = {
+    "loss_function": "huber_loss",  # Robust to outliers
+    "huber_delta": 1.0,
+    "multi_horizon_weights": {
+        "1day": 0.7,  # Higher weight for short-term
+        "3day": 0.3,
+    },
+    "feature_importance_weights": True,  # Weight important features more
+}
+```
+
+---
+
+## PROGRESSIVE TRAINING APPROACH
+
+### Phase 1: Basic Configuration (Weeks 1-2)
+```python
+PHASE_1_CONFIG = {
+    "nb_filters": 16,
+    "nb_stacks": 1,
+    "dropout_rate": 0.5,
+    "learning_rate": 1e-4,
+    "sequence_length": 7,
+    "selected_features": 20,  # Top 20 features only
+}
+```
+
+### Phase 2: Moderate Complexity (Weeks 3-4)
+```python
+PHASE_2_CONFIG = {
+    "nb_filters": 32,
+    "nb_stacks": 1,
+    "dropout_rate": 0.4,
+    "learning_rate": 8e-5,
+    "sequence_length": 10,
+    "selected_features": 30,  # Add more features
+    "use_attention": True,
+}
+```
+
+### Phase 3: Full Model (Week 5+)
+```python
+PHASE_3_CONFIG = {
+    "nb_filters": 48,
+    "nb_stacks": 2,
+    "dropout_rate": 0.35,
+    "learning_rate": 5e-5,
+    "sequence_length": 14,
+    "all_features": True,
+    "ensemble": True,
+}
+```
+
+---
+
+## EVALUATION & MONITORING
+
+### 1. METRICS YANG RELEVAN
+
+```python
+EVALUATION_METRICS = {
+    # Accuracy Metrics
+    "mae_1day": "primary_metric",
+    "mape_1day": "business_metric", 
+    "rmse_1day": "variance_metric",
+    
+    # Multi-horizon
+    "mae_3day": "secondary_metric",
+    "directional_accuracy": "trend_metric",
+    
+    # Domain-specific
+    "mortality_prediction_accuracy": "critical_metric",
+    "feed_efficiency_error": "economic_metric",
+    "growth_rate_deviation": "biological_metric",
+}
+```
+
+### 2. MONITORING DASHBOARD
+
+```python
+MONITORING_CONFIG = {
+    "track_metrics": [
+        "training_loss", "validation_loss",
+        "mae_1day", "mae_3day",
+        "feature_importance",
+        "prediction_confidence",
+    ],
+    "early_warning_thresholds": {
+        "overfitting": "val_loss > 1.2 * train_loss",
+        "poor_generalization": "mae_1day > 15%",
+        "training_instability": "loss_std > 0.1",
+    }
+}
+```
+
+---
+
+## HYPERPARAMETER SEARCH STRATEGY
+
+### 1. BAYESIAN OPTIMIZATION SPACE
+
+```python
+SEARCH_SPACE = {
+    # High Impact Parameters
+    "nb_filters": [16, 32, 48, 64],
+    "dropout_rate": [0.3, 0.4, 0.5, 0.6],
+    "learning_rate": [5e-5, 1e-4, 2e-4, 5e-4],
+    "sequence_length": [7, 10, 14],
+    
+    # Medium Impact  
+    "kernel_size": [2, 3, 4],
+    "nb_stacks": [1, 2],
+    "weight_decay": [1e-4, 1e-3, 1e-2],
+    
+    # Low Impact (fix these)
+    "batch_size": 16,  # Fixed untuk dataset kecil
+    "optimizer": "adamw",  # Fixed
+}
+```
+
+### 2. SEARCH BUDGET
+
+```python
+SEARCH_CONFIG = {
+    "max_trials": 50,      # Limited budget
+    "parallel_trials": 2,  # Conservative parallelism
+    "early_stopping_trials": True,
+    "pruning_strategy": "median",
+    "objective": "minimize_mae_1day",
+}
+```
+
+---
+
+## IMPLEMENTATION CHECKLIST
+
+### ✅ **Immediate Actions (Week 1)**
+1. Implement feature selection (95 → 30 features)
+2. Set up time series cross-validation
+3. Start with conservative config (Phase 1)
+4. Implement multi-horizon output heads
+
+### ✅ **Short-term (Weeks 2-3)**
+1. Add biological cycle encoding
+2. Implement ensemble strategy
+3. Set up comprehensive monitoring
+4. Begin hyperparameter search
+
+### ✅ **Medium-term (Weeks 4-6)**
+1. Experiment with attention mechanisms
+2. Fine-tune regularization strategies
+3. Optimize for production deployment
+4. Validate on held-out test periods
+
+---
+
+## EXPECTED OUTCOMES
+
+### Realistic Expectations:
+- **1-day predictions**: 80-90% accuracy achievable
+- **3-day predictions**: 70-85% accuracy realistic
+- **Training time**: 5-15 minutes per experiment
+- **Memory usage**: <2GB dengan batch_size=16
+
+### Success Metrics:
+- **Primary**: MAE < 10% untuk prediksi 1 hari
+- **Secondary**: MAPE < 15% untuk prediksi 3 hari  
+- **Robustness**: Consistent performance across different periods
+- **Stability**: Low variance dalam ensemble predictions
+
+Apakah ada aspek spesifik dari optimisasi ini yang ingin Anda diskusikan lebih detail?

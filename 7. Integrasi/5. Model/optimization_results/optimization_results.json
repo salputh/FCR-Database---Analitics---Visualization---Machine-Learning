@@ -1,0 +1,9 @@
+{
+  "best_params": {
+    "nb_filters": 124,
+    "kernel_size": 2,
+    "dropout_rate": 0.48792364350970896,
+    "nb_stacks": 2
+  },
+  "best_value": Infinity
+}

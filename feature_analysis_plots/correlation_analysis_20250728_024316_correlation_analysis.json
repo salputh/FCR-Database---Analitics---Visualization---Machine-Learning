@@ -1,0 +1,14 @@
+{
+  "correlation_statistics": {
+    "mean_correlation": 0.0,
+    "std_correlation": 0.0,
+    "min_correlation": 0.0,
+    "max_correlation": 0.0,
+    "strong_correlations_03": 0,
+    "strong_correlations_05": 0,
+    "strong_correlations_07": 0
+  },
+  "temporal_features_count": 96,
+  "tabular_features_count": 48,
+  "total_features": 144
+}

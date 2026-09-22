@@ -1,0 +1,33 @@
+2025-06-30 07:28:37,151 - FCR_Recommender - INFO - Menggunakan 10 baris terakhir dari './3. non-normalize/NORMALISASI_PERIODE_14.csv' sebagai data input baru.
+2025-06-30 07:28:37,151 - FCR_Recommender - INFO - Memuat artifak model...
+2025-06-30 07:28:37,283 - FCR_Recommender - ERROR - GAGAL memuat artifak: File tidak ditemukan - [Errno 2] No such file or directory: '/Users/macmini/Documents/Skripsi/TCN-XGBOOST/5. Model/models_terbaru/../2. Hasil Normalisasi/Terbaru/normalization_info.json'. Pastikan path '/Users/macmini/Documents/Skripsi/TCN-XGBOOST/5. Model/models_terbaru' benar.
+2025-06-30 07:28:37,283 - FCR_Recommender - ERROR - File data sampel tidak ditemukan di './3. non-normalize/NORMALISASI_PERIODE_14.csv'. Pastikan path benar.
+2025-06-30 07:30:05,392 - FCR_Recommender - INFO - Menggunakan 10 baris terakhir dari './3. non-normalize/NORMALISASI_PERIODE_14.csv' sebagai data input baru.
+2025-06-30 07:30:05,393 - FCR_Recommender - INFO - Memuat artifak model...
+2025-06-30 07:30:05,508 - FCR_Recommender - ERROR - GAGAL memuat artifak: File tidak ditemukan - [Errno 2] No such file or directory: '/Users/macmini/Documents/Skripsi/TCN-XGBOOST/5. Model/models_terbaru/../2. Hasil Normalisasi/Terbaru/normalization_info.json'. Pastikan path '/Users/macmini/Documents/Skripsi/TCN-XGBOOST/5. Model/models_terbaru' benar.
+2025-06-30 07:30:05,508 - FCR_Recommender - ERROR - File data sampel tidak ditemukan di './3. non-normalize/NORMALISASI_PERIODE_14.csv'. Pastikan path benar.
+2025-06-30 07:31:50,566 - FCR_Recommender - INFO - Menggunakan 10 baris terakhir dari './3. non-normalize/NORMALISASI_PERIODE_14.csv' sebagai data input baru.
+2025-06-30 07:31:50,566 - FCR_Recommender - INFO - Memuat artifak model...
+2025-06-30 07:31:50,686 - FCR_Recommender - ERROR - GAGAL memuat artifak: File tidak ditemukan - [Errno 2] No such file or directory: '/Users/macmini/Documents/Skripsi/TCN-XGBOOST/5. Model/models_terbaru/../2. Hasil Normalisasi/Terbaru/normalization_info.json'. Pastikan path '/Users/macmini/Documents/Skripsi/TCN-XGBOOST/5. Model/models_terbaru' benar.
+2025-06-30 07:31:50,686 - FCR_Recommender - ERROR - File data sampel tidak ditemukan di './3. non-normalize/NORMALISASI_PERIODE_14.csv'. Pastikan path benar.
+2025-06-30 07:33:09,855 - FCR_Recommender - INFO - Menggunakan 10 baris terakhir dari './3. non-normalize/NORMALISASI_PERIODE_14.csv' sebagai data input baru.
+2025-06-30 07:33:09,855 - FCR_Recommender - INFO - Memuat artifak model...
+2025-06-30 07:33:09,990 - FCR_Recommender - ERROR - GAGAL memuat artifak: File tidak ditemukan - [Errno 2] No such file or directory: '/Users/macmini/Documents/Skripsi/TCN-XGBOOST/5. Model/models_terbaru/2. Hasil Normalisasi/Terbaru/normalization_info.json'. Pastikan path '/Users/macmini/Documents/Skripsi/TCN-XGBOOST/5. Model/models_terbaru' benar.
+2025-06-30 07:33:09,990 - FCR_Recommender - ERROR - File data sampel tidak ditemukan di './3. non-normalize/NORMALISASI_PERIODE_14.csv'. Pastikan path benar.
+2025-06-30 07:36:35,091 - FCR_Recommender - INFO - Menggunakan 10 baris terakhir dari './3. non-normalize/NORMALISASI_PERIODE_14.csv' sebagai data input baru.
+2025-06-30 07:36:35,091 - FCR_Recommender - INFO - Memuat artifak model...
+2025-06-30 07:36:35,219 - FCR_Recommender - INFO - Semua artifak berhasil dimuat.
+2025-06-30 07:36:35,219 - FCR_Recommender - INFO - Menerapkan rekayasa fitur pada data baru...
+2025-06-30 07:36:35,389 - FCR_Recommender - INFO - Menerapkan normalisasi pada data baru...
+2025-06-30 07:36:35,394 - FCR_Recommender - INFO - Mengekstrak fitur hibrida untuk prediksi...
+2025-06-30 07:36:35,395 - FCR_Recommender - ERROR - Terjadi error pada saat eksekusi utama: Data input tidak cukup untuk membuat sekuens dengan panjang 11. Butuh minimal 11 baris data.
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/Skripsi/TCN-XGBOOST/4. pelatihan/generate_recommendation_report.py", line 461, in <module>
+    final_report = recommender.generate_recommendations(raw_data_df=sample_new_data)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/Skripsi/TCN-XGBOOST/4. pelatihan/generate_recommendation_report.py", line 332, in generate_recommendations
+    hybrid_features = self._extract_hybrid_features(df_processed)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/Skripsi/TCN-XGBOOST/4. pelatihan/generate_recommendation_report.py", line 286, in _extract_hybrid_features
+    raise ValueError(
+ValueError: Data input tidak cukup untuk membuat sekuens dengan panjang 11. Butuh minimal 11 baris data.

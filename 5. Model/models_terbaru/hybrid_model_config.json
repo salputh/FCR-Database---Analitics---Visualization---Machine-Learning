@@ -1,0 +1,239 @@
+{
+    "sequence_length": 3,
+    "batch_size": 8,
+    "multi_output_config": {
+        "output_strategy": "multi_head",
+        "horizons": [
+            1,
+            3
+        ],
+        "output_dims": [
+            95,
+            95
+        ],
+        "horizon_weights": [
+            0.5,
+            0.5
+        ]
+    },
+    "tcn_params": {
+        "nb_filters": 32,
+        "kernel_size": 3,
+        "nb_stacks": 3,
+        "dilations": [
+            1,
+            2,
+            4
+        ],
+        "dropout_rate": 0.4,
+        "spatial_dropout": 0.2,
+        "kernel_regularizer": "l2",
+        "kernel_regularizer_strength": 0.0001,
+        "learning_rate": 0.0001,
+        "optimizer": "adamw",
+        "weight_decay": 0.001,
+        "gradient_clip_norm": 0.5
+    },
+    "xgb_params": {
+        "objective": "reg:squarederror",
+        "eval_metric": "rmse",
+        "n_estimators": 150,
+        "learning_rate": 0.1,
+        "max_depth": 7,
+        "subsample": 0.98,
+        "colsample_bytree": 0.9,
+        "reg_alpha": 0.1,
+        "reg_lambda": 0.25,
+        "random_state": 42,
+        "n_jobs": -1
+    },
+    "training_params": {
+        "early_stopping": {
+            "patience": 25,
+            "monitor": "val_mae"
+        },
+        "lr_scheduler": {
+            "type": "reduce_on_plateau",
+            "patience": 15
+        }
+    },
+    "feature_names": [
+        "AGE",
+        "MATI",
+        "JML_DEPLESI",
+        "STD_CUM_DEPLESI_%",
+        "PAKAN_STD_CUM_GR/EK",
+        "DELTA_PAKAN_ZAK",
+        "DELTA_PAKAN_CUM_GR/EKOR",
+        "DG_ACT",
+        "DELTA_ABW",
+        "DELTA_DG",
+        "FCR_STD",
+        "DELTA_FCR",
+        "IP_STD",
+        "IP_ACT",
+        "JUMLAH_AYAM_AKHIR",
+        "FCR_ACT_lag_1",
+        "FCR_ACT_lag_7",
+        "FCR_ACT_lag_14",
+        "PAKAN_ACT_GR/EK_lag_14",
+        "DG_ACT_lag_1",
+        "DG_ACT_lag_2",
+        "DG_ACT_lag_3",
+        "DG_ACT_lag_7",
+        "DG_ACT_lag_14",
+        "MATI_lag_1",
+        "MATI_lag_2",
+        "MATI_lag_3",
+        "MATI_lag_7",
+        "MATI_lag_14",
+        "JML_DEPLESI_lag_7",
+        "JML_DEPLESI_lag_14",
+        "DELTA_PAKAN_GR/EKOR_lag_1",
+        "DELTA_PAKAN_GR/EKOR_lag_2",
+        "DELTA_PAKAN_GR/EKOR_lag_3",
+        "DELTA_PAKAN_GR/EKOR_lag_7",
+        "DELTA_PAKAN_GR/EKOR_lag_14",
+        "DELTA_DG_lag_1",
+        "DELTA_DG_lag_2",
+        "DELTA_DG_lag_3",
+        "DELTA_DG_lag_7",
+        "DELTA_DG_lag_14",
+        "PAKAN_ACT_GR/EK_rolling_std_3",
+        "PAKAN_ACT_GR/EK_rolling_std_7",
+        "PAKAN_ACT_GR/EK_rolling_std_14",
+        "DG_ACT_rolling_mean_3",
+        "DG_ACT_rolling_std_3",
+        "DG_ACT_rolling_min_3",
+        "DG_ACT_rolling_max_3",
+        "DG_ACT_rolling_std_7",
+        "DG_ACT_rolling_min_7",
+        "DG_ACT_rolling_std_14",
+        "DG_ACT_rolling_min_14",
+        "MATI_rolling_mean_3",
+        "MATI_rolling_std_3",
+        "MATI_rolling_min_3",
+        "MATI_rolling_max_3",
+        "MATI_rolling_mean_7",
+        "MATI_rolling_std_7",
+        "MATI_rolling_min_7",
+        "MATI_rolling_max_7",
+        "MATI_rolling_mean_14",
+        "MATI_rolling_std_14",
+        "MATI_rolling_min_14",
+        "MATI_rolling_max_14",
+        "JML_DEPLESI_rolling_std_3",
+        "JML_DEPLESI_rolling_std_7",
+        "JML_DEPLESI_rolling_std_14",
+        "DELTA_PAKAN_GR/EKOR_rolling_mean_3",
+        "DELTA_PAKAN_GR/EKOR_rolling_std_3",
+        "DELTA_PAKAN_GR/EKOR_rolling_min_3",
+        "DELTA_PAKAN_GR/EKOR_rolling_max_3",
+        "DELTA_PAKAN_GR/EKOR_rolling_mean_7",
+        "DELTA_PAKAN_GR/EKOR_rolling_std_7",
+        "DELTA_PAKAN_GR/EKOR_rolling_min_7",
+        "DELTA_PAKAN_GR/EKOR_rolling_max_7",
+        "DELTA_PAKAN_GR/EKOR_rolling_mean_14",
+        "DELTA_PAKAN_GR/EKOR_rolling_std_14",
+        "DELTA_PAKAN_GR/EKOR_rolling_min_14",
+        "DELTA_PAKAN_GR/EKOR_rolling_max_14",
+        "DELTA_DG_rolling_mean_3",
+        "DELTA_DG_rolling_min_3",
+        "DELTA_DG_rolling_max_3",
+        "DELTA_DG_rolling_mean_7",
+        "DELTA_DG_rolling_std_7",
+        "DELTA_DG_rolling_min_7",
+        "DELTA_DG_rolling_max_7",
+        "DELTA_DG_rolling_mean_14",
+        "DELTA_DG_rolling_std_14",
+        "DELTA_DG_rolling_min_14",
+        "PAKAN_DG_RATIO",
+        "PAKAN_ACT_GR/EK_momentum_1",
+        "PAKAN_ACT_GR/EK_acceleration",
+        "PAKAN_ACT_GR/EK_volatility_3",
+        "PAKAN_ACT_GR/EK_trend_slope_3",
+        "DG_ACT_momentum_1",
+        "DG_ACT_acceleration",
+        "DG_ACT_volatility_3",
+        "DG_ACT_trend_slope_3",
+        "MATI_momentum_1",
+        "MATI_acceleration",
+        "MATI_volatility_3",
+        "MATI_trend_slope_3",
+        "JML_DEPLESI_momentum_1",
+        "JML_DEPLESI_acceleration",
+        "JML_DEPLESI_volatility_3",
+        "ABW_ACT_acceleration",
+        "ABW_ACT_volatility_3",
+        "DELTA_PAKAN_GR/EKOR_momentum_1",
+        "DELTA_PAKAN_GR/EKOR_acceleration",
+        "DELTA_PAKAN_GR/EKOR_volatility_3",
+        "DELTA_PAKAN_GR/EKOR_trend_slope_3",
+        "FEED_EFFICIENCY_lag_1"
+    ],
+    "target_names": [
+        "FCR_NEXT_1D",
+        "FCR_NEXT_3D"
+    ],
+    "horizons": [
+        1,
+        3
+    ],
+    "model_type": "TCN-XGBoost Multi-Output Hybrid with 9-Fold CV",
+    "cross_validation_results": {
+        "n_folds": 9,
+        "tcn_validation_loss": {
+            "mean": 0.21197261578506893,
+            "std": 0.025734147437844898,
+            "scores": [
+                0.22048752009868622,
+                0.24117082357406616,
+                0.19657830893993378,
+                0.15789054334163666,
+                0.21842479705810547,
+                0.2001250684261322,
+                0.2525732219219208,
+                0.21455250680446625,
+                0.2059507519006729
+            ]
+        },
+        "horizon_results": {
+            "horizon_1d": {
+                "mae": {
+                    "mean": 0.01583831539998452,
+                    "std": 0.0042020749038616965
+                },
+                "rmse": {
+                    "mean": 0.02419974783663751,
+                    "std": 0.006007821354284679
+                },
+                "mape": {
+                    "mean": 0.01689913361850712,
+                    "std": 0.005882426723438054
+                },
+                "r2": {
+                    "mean": 0.9877269466718038,
+                    "std": 0.0035739567929194216
+                }
+            },
+            "horizon_3d": {
+                "mae": {
+                    "mean": 0.018534352795945272,
+                    "std": 0.00566969638804537
+                },
+                "rmse": {
+                    "mean": 0.027337347838906744,
+                    "std": 0.0080760940200746
+                },
+                "mape": {
+                    "mean": 0.017281120436059103,
+                    "std": 0.006391201327426154
+                },
+                "r2": {
+                    "mean": 0.9759648376040988,
+                    "std": 0.010862011600072382
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,19 @@
+============================================================
+Penjelasan Prediksi FCR (Horizon +1 Hari)
+============================================================
+FCR Diprediksi: 1.180270
+
+Faktor Utama yang Memengaruhi Prediksi:
+1. Efisiensi pakan kemarin (1.12 FCR) sangat baik, menunjukkan efisiensi pakan kemarin optimal.
+2. Rasio pakan dibandingkan pertumbuhan harian ayam (1.18 rasio) sangat rendah, menunjukkan pakan cukup efisien.
+3. Selisih efisiensi pakan aktual dengan standar (0.00) mendekati standar, berkontribusi stabil pada prediksi.
+4. Selisih pakan yang diberikan dengan standar (zak) (1.00 zak) menunjukkan pakan berlebihan dibandingkan standar.
+5. Efisiensi pakan kemarin (0.89 FCR) sangat baik, menunjukkan efisiensi pakan kemarin optimal.
+
+Rekomendasi untuk Peternak:
+1. Pertahankan pola pemberian pakan saat ini.
+2. Pertahankan jumlah pakan saat ini, tapi pastikan ayam mendapat nutrisi cukup.
+3. Lanjutkan pemantauan efisiensi pakan.
+4. Kurangi jumlah pakan sebanyak 0.5-1 zak per hari.
+5. Pertahankan pola pakan saat ini.
+============================================================
